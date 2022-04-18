@@ -24,14 +24,14 @@ services:
 {% if deluge_docker_api_portmaping %}
       - {{deluge_docker_api_port}}:58846 # API disabled
 {% endif %}
-      - {{deluge_docker_torrent_port}}:58946 #torrent
+      - {{deluge_docker_torrent_port}}:58946 # torrent
       - {{deluge_docker_torrent_port}}:58946/udp # torrent
     environment:
       - PUID={{deluge_uid}}
       - PGID={{deluge_gid}}
       - TZ=Europe/Paris
-      - UMASK_SET=002 #optional
-      - DELUGE_LOGLEVEL=error #optional
+      - UMASK_SET=002 # optional
+      - DELUGE_LOGLEVEL=error # optional
     restart: "always"
 {% if deluge_docker_traefik %}
     labels:
