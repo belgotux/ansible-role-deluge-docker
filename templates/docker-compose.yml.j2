@@ -1,0 +1,42 @@
+version: '3.7'
+
+{% if deluge_docker_traefik %}
+networks:
+  {{traefik_network_name}}:
+    external: true
+{% endif %}
+
+services:
+  deluge:
+    image: linuxserver/deluge
+    container_name: deluge
+{% if deluge_docker_traefik %}
+    networks:
+      - {{traefik_network_name}}
+{% endif %}
+    volumes:
+      - {{deluge_config}}:/config
+      - {{deluge_path}}:/torrent
+    ports:
+{% if deluge_docker_portmaping %}
+      - 8112:8112 # web via traefik
+{% endif %}
+{% if deluge_docker_api_portmaping %}
+      - {{deluge_docker_api_port}}:58846 # API disabled
+{% endif %}
+      - {{deluge_docker_torrent_port}}:58946 #torrent
+      - {{deluge_docker_torrent_port}}:58946/udp # torrent
+    environment:
+      - PUID={{deluge_uid}}
+      - PGID={{deluge_gid}}
+      - TZ=Europe/Paris
+      - UMASK_SET=002 #optional
+      - DELUGE_LOGLEVEL=error #optional
+    restart: "always"
+{% if deluge_docker_traefik %}
+    labels:
+      - traefik.http.services.deluge-web.loadbalancer.server.port=8112
+      - traefik.http.routers.deluge-web.entrypoints=websecure
+      - traefik.http.routers.deluge-web.tls.certresolver=le
+      - "traefik.http.routers.deluge-web.rule=Host(`{{deluge_traefik_subdomain}}.{{traefik_domain}}`)"
+{% endif %}

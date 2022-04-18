@@ -1,0 +1,64 @@
+---
+# tasks file for deluge-docker
+- name: create group {{deluge_group}}
+  group:
+    name: "{{deluge_group}}"
+    gid: "{{deluge_gid}}"
+    system: yes
+    state: present
+
+- name: create user {{deluge_user}}
+  user:
+    name: "{{deluge_user}}"
+    uid: "{{deluge_uid}}"
+    system: yes
+    group: "{{deluge_group}}"
+    expires: -1
+    home: "{{deluge_path}}"
+    shell: "/bin/false"
+    create_home: yes
+    state: present
+    
+- name: create dirs tmp complets seed archives
+  file:
+    name: "{{deluge_path}}/{{item}}"
+    state: directory
+    owner: "{{deluge_uid}}"
+    group: "{{deluge_group}}"
+    mode: 0775
+  loop: "{{deluge_sub_paths}}"
+  when: deluge_sub_paths is defined
+
+- name: create docker dir
+  file:
+    name: "{{docker_conf}}/deluge"
+    state: directory
+    owner: "{{docker_user}}"
+    group: "{{docker_group}}"
+    mode: 0775
+- name: copy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{docker_conf}}/deluge/docker-compose.yml"
+    owner: "{{docker_user}}"
+    group: "{{docker_group}}"
+    mode: 0775
+
+- name: create deluge config dir
+  file:
+    name: "{{deluge_config}}"
+    state: directory
+    owner: "{{deluge_uid}}"
+    group: "{{deluge_group}}"
+    mode: 0775
+
+- name: docker-compose pull
+  community.docker.docker_compose:
+    project_src: "{{docker_conf}}/deluge"
+    pull: yes
+
+- name: docker-compose up
+  community.docker.docker_compose:
+    project_src: "{{docker_conf}}/deluge"
+    state: present
+  when: deluge_docker_start
