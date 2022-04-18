@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: deluge-docker
+  role_name: deluge_docker
   author: belgotux
   description: Role to create deluge user/group and directory to use in the cluster. Based on the image `linuxserver/deluge`.
   license: GPL-3.0-or-later
