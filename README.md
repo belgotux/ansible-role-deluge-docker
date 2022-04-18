@@ -8,7 +8,7 @@ Based on the image `linuxserver/deluge`.
 Requirements
 ------------
 
-- Docker and docker-compose installed (with [my role](../docker/README.md) if needed)
+- Docker and docker-compose installed (with [my role](docker/README.md) if needed)
 - Ansible collection community.docker ([documentation](https://docs.ansible.com/ansible/latest/collections/community/docker/docker_compose_module.html)) : `ansible-galaxy collection install community.docker`
 
 Role Variables
