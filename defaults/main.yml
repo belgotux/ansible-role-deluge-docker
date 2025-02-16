@@ -1,19 +1,19 @@
 ---
 # defaults file for deluge-docker
-deluge_uid: 202
-deluge_gid: 202
-deluge_user: dl
-deluge_group: dl
-deluge_torrent_path: /torrent
-deluge_sub_paths:
+docker_deluge_uid: 202
+docker_deluge_gid: 202
+docker_deluge_user: dl
+docker_deluge_group: dl
+docker_deluge_torrent_path: /torrent
+docker_deluge_sub_paths:
   - tmp
   - complets
   - archives
 docker_deluge_torrent_port: 58946
 
-docker_deluge_service_name: 'deluge'
-docker_deluge_dir: "{{ docker_conf }}/{{ docker_deluge_service_name }}"
-docker_deluge_config: "{{ docker_deluge_dir }}/config"
+docker_deluge_service_name: deluge
+docker_deluge_dir: '/etc/docker/{{ docker_deluge_service_name }}'
+docker_deluge_config: '{{ docker_deluge_dir }}/config'
 docker_deluge_portmaping: true
 docker_deluge_port: 8112
 docker_deluge_loglevel: error
@@ -23,11 +23,6 @@ docker_deluge_api_portmaping: false
 docker_deluge_api_port: 58846
 
 docker_deluge_traefik: false
-deluge_traefik_subdomain: deluge
+docker_deluge_traefik_subdomain: deluge
 
 
-traefik_network_name: proxy-net
-traefik_domain: yourdomain.tld
-docker_user: 1000
-docker_group: docker
-docker_conf: /etc/docker

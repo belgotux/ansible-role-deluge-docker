@@ -1,62 +1,62 @@
 ---
 # tasks file for deluge-docker
-- name: create group {{deluge_group}}
+- name: Create group {{ docker_deluge_group }}
   group:
-    name: "{{deluge_group}}"
-    gid: "{{deluge_gid}}"
+    name: '{{ docker_deluge_group }}'
+    gid: '{{ docker_deluge_gid }}'
     system: true
     state: present
 
-- name: create user {{deluge_user}}
+- name: Create user {{ docker_deluge_user }}
   user:
-    name: "{{deluge_user}}"
-    uid: "{{deluge_uid}}"
+    name: '{{ docker_deluge_user }}'
+    uid: '{{ docker_deluge_uid }}'
     system: true
-    group: "{{deluge_group}}"
+    group: '{{ docker_deluge_group }}'
     expires: -1
-    home: "{{deluge_torrent_path}}"
+    home: '{{ docker_deluge_torrent_path }}'
     shell: "/bin/false"
     create_home: true
     state: present
-    
-- name: create dirs tmp complets seed archives
-  file:
-    name: "{{deluge_torrent_path}}/{{item}}"
-    state: directory
-    owner: "{{deluge_uid}}"
-    group: "{{deluge_group}}"
-    mode: 0775
-  loop: "{{deluge_sub_paths}}"
-  when: deluge_sub_paths is defined
 
-- name: create deluge docker dir
+- name: Create dirs tmp complets seed archives
   file:
-    name: "{{ docker_deluge_dir }}"
+    name: '{{ docker_deluge_torrent_path }}/{{ item }}'
     state: directory
-    owner: "{{docker_user}}"
-    group: "{{docker_group}}"
-    mode: 0775
-- name: copy docker-compose.yml
+    owner: '{{ docker_deluge_uid }}'
+    group: '{{ docker_deluge_group }}'
+    mode: '0775'
+  loop: '{{ docker_deluge_sub_paths }}'
+  when: docker_deluge_sub_paths is defined
+
+- name: Create deluge docker dir
+  file:
+    name: '{{ docker_deluge_dir }}'
+    state: directory
+    owner: '{{ docker_deluge_docker_user }}'
+    group: '{{ docker_deluge_docker_group }}'
+    mode: '0775'
+
+- name: Copy docker-compose.yml
   template:
     src: docker-compose.yml.j2
-    dest: "{{docker_deluge_dir}}/docker-compose.yml"
-    owner: "{{docker_user}}"
-    group: "{{docker_group}}"
+    dest: '{{ docker_deluge_dir }}/docker-compose.yml'
+    owner: '{{ docker_deluge_docker_user }}'
+    group: '{{ docker_deluge_docker_group }}'
     backup: true
-    mode: 0664
-  notify: 
-    - docker down deluge
-    - docker up deluge
+    mode: '0664'
+  notify:
+    - Docker down deluge
+    - Docker up deluge
 
-- name: create deluge config dir
+- name: Create deluge config dir
   file:
-    name: "{{docker_deluge_config}}"
+    name: '{{ docker_deluge_config }}'
     state: directory
-    owner: "{{deluge_uid}}"
-    group: "{{deluge_group}}"
-    mode: 0775
+    owner: '{{ docker_deluge_uid }}'
+    group: '{{ docker_deluge_group }}'
+    mode: '0775'
 
-- name: docker pull
+- name: Docker pull
   community.docker.docker_compose_v2:
-    project_src: "{{ docker_deluge_dir }}"
-    pull: always
+    project_src: '{{ docker_deluge_dir }}'
