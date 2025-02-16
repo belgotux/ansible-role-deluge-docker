@@ -1,0 +1,15 @@
+{
+    "file": 1,
+    "format": 1
+}{
+    "commands": [
+{% for item in docker_deluge_execute_list %}
+        [
+            "{{ lookup('pipe', 'python3 -c "import random; print(\'\'.join(random.choices(\'0123456789abcdef\', k=40)))"') }}",
+            "{{ item[0] }}",
+            "{{ item[1] }}"
+        ]{% if not loop.last %},{% endif %}
+        
+{% endfor %}
+    ]
+}

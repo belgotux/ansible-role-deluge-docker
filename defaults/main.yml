@@ -28,6 +28,8 @@ docker_deluge_traefik: false
 docker_deluge_traefik_subdomain: deluge
 docker_deluge_traefik_network_name: proxy-net
 
+docker_deluge_volumes_extra: []
+
 # Bandwidth
 docker_deluge_max_connections_global: 1200
 docker_deluge_max_upload_slots_global: 35
@@ -48,3 +50,4 @@ docker_deluge_max_active_seeding: 200
 
 # plugins
 docker_deluge_blocklist_url: https://raw.githubusercontent.com/Naunter/BT_BlockLists/master/bt_blocklists.gz
+docker_deluge_execute_list: []

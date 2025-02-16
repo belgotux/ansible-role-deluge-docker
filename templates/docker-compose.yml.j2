@@ -9,6 +9,7 @@ services:
     image: linuxserver/deluge
 {% if docker_deluge_service_name %}
     container_name: {{ docker_deluge_service_name }}
+    hostname: {{ docker_deluge_service_name }}
 {% endif %}
 {% if docker_deluge_traefik %}
     networks:
@@ -17,6 +18,9 @@ services:
     volumes:
       - {{ docker_deluge_config }}:/config
       - {{ docker_deluge_torrent_path }}:/torrent
+{% for volume in docker_deluge_volumes_extra %}
+      - {{ volume }}
+{%endfor %}
     ports:
 {% if docker_deluge_portmaping %}
       - 8112:8112 # web via traefik

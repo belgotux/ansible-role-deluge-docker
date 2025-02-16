@@ -12,3 +12,16 @@
     mode: '0664'
   when: not docker_deluge_blocklist_stat.stat.exists
 
+- name: Check if execute exist
+  stat:
+    path: '{{ docker_deluge_config }}/execute.conf'
+  register: docker_deluge_execute_stat
+- name: Configure plugin execute
+  template:
+    src: execute.conf.j2
+    dest: '{{ docker_deluge_config }}/execute.conf'
+    owner: '{{ docker_deluge_user }}'
+    group: '{{ docker_deluge_group }}'
+    backup: true
+    mode: '0664'
+  when: docker_deluge_execute_list | length != 0 and not docker_deluge_execute_stat.stat.exists

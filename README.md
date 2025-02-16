@@ -39,6 +39,7 @@ Optionnal and can be inherit for other docker roles in the collection via variab
   - `archives` to archive the .torrent files
 - `docker_deluge_torrent_port` port to expose for torrent P2P (default 58946) that is bind to 58946 inside the docker
 - `docker_deluge_dir` the directory for deluge (default `/etc/docker/deluge`)
+- `docker_deluge_volumes_extra` list of extra volume lines for docker-compose file
 
 ### Second docker configuration (very optional)
 - `docker_deluge_portmaping` web interface portmapping (default yes)
@@ -74,6 +75,9 @@ Queue :
 
 ### Plugin blocklist
 - `docker_deluge_blocklist_url` URL to blocklists file (same for transmission) (default `https://raw.githubusercontent.com/Naunter/BT_BlockLists/master/bt_blocklists.gz`)
+
+### Plugin execute
+- `docker_deluge_execute_list` list of type (complete|added|removed) and script path. You need to use `docker_deluge_volumes_extra` to bidn script inside the container.
 
 Dependencies
 ------------
@@ -112,6 +116,12 @@ Example Playbook
     docker_deluge_service_name: 'deluge-test'
     docker_deluge_traefik: true
     docker_deluge_traefik_domain: deluge.yourdomain.tld
+
+    docker_deluge_volumes_extra:
+      - /usr/local/bin/wrapper_telegram.sh:/usr/local/bin/wrapper_telegram.sh:ro
+
+    docker_deluge_execute_list:
+      - ["complete", "/usr/local/bin/wrapper_telegram.sh"]
 
     docker_deluge_portmaping: false
     docker_deluge_max_download_speed: 30000.0
