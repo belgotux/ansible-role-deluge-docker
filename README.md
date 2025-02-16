@@ -27,22 +27,24 @@ The role can work as it with the [default configuration](defaults/main.yml).
 - `deluge_gid` define a system group gid (default 202)
 - `deluge_user` user in the host for files's ownership (default dl)
 - `deluge_group` group (default dl)
-- `deluge_path` deluge data root path on the host (default /torrent) that is bind to /torrent inside the docker
-- `deluge_config` deluge config path on the host (default /etc/docker/deluge/config) that is bind to /config inside the docker
+- `deluge_torrent_path` deluge data root path on the host (default /torrent) that is bind to /torrent inside the docker
+- `docker_deluge_config` deluge config path on the host (default /etc/docker/deluge/config) that is bind to /config inside the docker
 - `deluge_sub_paths` list of paths used by deluge
   - `tmp` for current downloads
   - `complets` for finished downloads
   - `archives` to archive the .torrent files
-- `deluge_docker_torrent_port` port to expose for torrent P2P (default 58946) that is bind to 58946 inside the docker
+- `docker_deluge_torrent_port` port to expose for torrent P2P (default 58946) that is bind to 58946 inside the docker
 
 ### Second
-- `deluge_docker_portmaping` use portmapping (default yes)
-- `deluge_docker_port` port to use in portmaping mode (default 8112)
-- `deluge_docker_api_portmaping` allow API portmapping, no needed if you using only webinterface (default no)
-- `deluge_docker_api_port` port to use for API portmapping (default 58846)
-- `deluge_docker_traefik` use Traefik labels as reverse proxy for https (default no)
+- `docker_deluge_portmaping` web interface portmapping (default yes)
+- `docker_deluge_port` port to use in portmaping mode (default 8112)
+- `docker_deluge_api_portmaping` allow API portmapping, no needed if you using only webinterface (default no)
+- `docker_deluge_api_port` port to use for API portmapping (default 58846)
+- `docker_deluge_traefik` use Traefik labels as reverse proxy for https (default no)
 - `deluge_traefik_subdomain` the subdomaine to create with Traefik for deluge (default deluge)
-- `deluge_docker_start` start the docker-compose directly at the end of configuration (default no).
+- `docker_deluge_start` start the docker-compose directly at the end of configuration (default no).
+- `docker_deluge_loglevel` set the loglevel output when running Deluge (default `error`) (image default is info for deluged and warning for delgued-web)
+- `docker_deluge_service_name` container name (default `deluge`)
 
 
 
@@ -52,17 +54,16 @@ Installed by the role :
 - pip3
 - pip lib for docker
   - `docker`
-  - `docker-compose`
 
 Example Playbook
 ----------------
 
 ```
-- hosts: "{{myhost | default('vpsnl')}}"
+- hosts: "{{myhost | default('all')}}"
   remote_user: root
 
   roles:
-    - name: deluge-docker
+    - role: belgotux.docker_deluge
 ```
 
 License

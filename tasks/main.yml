@@ -4,24 +4,24 @@
   group:
     name: "{{deluge_group}}"
     gid: "{{deluge_gid}}"
-    system: yes
+    system: true
     state: present
 
 - name: create user {{deluge_user}}
   user:
     name: "{{deluge_user}}"
     uid: "{{deluge_uid}}"
-    system: yes
+    system: true
     group: "{{deluge_group}}"
     expires: -1
-    home: "{{deluge_path}}"
+    home: "{{deluge_torrent_path}}"
     shell: "/bin/false"
-    create_home: yes
+    create_home: true
     state: present
     
 - name: create dirs tmp complets seed archives
   file:
-    name: "{{deluge_path}}/{{item}}"
+    name: "{{deluge_torrent_path}}/{{item}}"
     state: directory
     owner: "{{deluge_uid}}"
     group: "{{deluge_group}}"
@@ -29,9 +29,9 @@
   loop: "{{deluge_sub_paths}}"
   when: deluge_sub_paths is defined
 
-- name: create docker dir
+- name: create deluge docker dir
   file:
-    name: "{{docker_conf}}/deluge"
+    name: "{{ docker_deluge_dir }}"
     state: directory
     owner: "{{docker_user}}"
     group: "{{docker_group}}"
@@ -39,26 +39,24 @@
 - name: copy docker-compose.yml
   template:
     src: docker-compose.yml.j2
-    dest: "{{docker_conf}}/deluge/docker-compose.yml"
+    dest: "{{docker_deluge_dir}}/docker-compose.yml"
     owner: "{{docker_user}}"
     group: "{{docker_group}}"
-    mode: 0775
+    backup: true
+    mode: 0664
+  notify: 
+    - docker down deluge
+    - docker up deluge
 
 - name: create deluge config dir
   file:
-    name: "{{deluge_config}}"
+    name: "{{docker_deluge_config}}"
     state: directory
     owner: "{{deluge_uid}}"
     group: "{{deluge_group}}"
     mode: 0775
 
-- name: docker-compose pull
-  community.docker.docker_compose:
-    project_src: "{{docker_conf}}/deluge"
-    pull: yes
-
-- name: docker-compose up
-  community.docker.docker_compose:
-    project_src: "{{docker_conf}}/deluge"
-    state: present
-  when: deluge_docker_start
+- name: docker pull
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_deluge_dir }}"
+    pull: always

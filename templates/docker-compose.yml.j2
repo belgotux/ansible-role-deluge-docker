@@ -1,42 +1,43 @@
-version: '3.7'
-
-{% if deluge_docker_traefik %}
+{% if docker_deluge_traefik %}
 networks:
   {{traefik_network_name}}:
     external: true
 {% endif %}
 
 services:
-  deluge:
+  {{ docker_deluge_service_name }}:
     image: linuxserver/deluge
-    container_name: deluge
-{% if deluge_docker_traefik %}
+{% if docker_deluge_service_name %}
+    container_name: {{ docker_deluge_service_name }}
+{% endif %}
+{% if docker_deluge_traefik %}
     networks:
-      - {{traefik_network_name}}
+      - {{traefik_network_name }}
 {% endif %}
     volumes:
-      - {{deluge_config}}:/config
-      - {{deluge_path}}:/torrent
+      - {{ docker_deluge_config }}:/config
+      - {{ deluge_torrent_path }}:/torrent
     ports:
-{% if deluge_docker_portmaping %}
+{% if docker_deluge_portmaping %}
       - 8112:8112 # web via traefik
 {% endif %}
-{% if deluge_docker_api_portmaping %}
-      - {{deluge_docker_api_port}}:58846 # API disabled
+{% if docker_deluge_api_portmaping %}
+      - {{ docker_deluge_api_port }}:58846 # API disabled
 {% endif %}
-      - {{deluge_docker_torrent_port}}:58946 # torrent
-      - {{deluge_docker_torrent_port}}:58946/udp # torrent
+      - {{ docker_deluge_torrent_port }}:58946 # torrent
+      - {{ docker_deluge_torrent_port }}:58946/udp # torrent
     environment:
-      - PUID={{deluge_uid}}
-      - PGID={{deluge_gid}}
+      - PUID={{ deluge_uid }}
+      - PGID={{ deluge_gid }}
       - TZ=Europe/Paris
       - UMASK_SET=002 # optional
-      - DELUGE_LOGLEVEL=error # optional
+      - DELUGE_LOGLEVEL={{ docker_deluge_loglevel }} # optional
     restart: "always"
-{% if deluge_docker_traefik %}
+{% if docker_deluge_traefik %}
     labels:
-      - traefik.http.services.deluge-web.loadbalancer.server.port=8112
-      - traefik.http.routers.deluge-web.entrypoints=websecure
-      - traefik.http.routers.deluge-web.tls.certresolver=le
-      - "traefik.http.routers.deluge-web.rule=Host(`{{deluge_traefik_subdomain}}.{{traefik_domain}}`)"
+      - traefik.enable=true
+      - traefik.http.services.{{ docker_deluge_service_name }}-web.loadbalancer.server.port=8112
+      - traefik.http.routers.{{ docker_deluge_service_name }}-web.entrypoints=websecure
+      - traefik.http.routers.{{ docker_deluge_service_name }}-web.tls.certresolver=le
+      - "traefik.http.routers.{{ docker_deluge_service_name }}-web.rule=Host(`{{ deluge_traefik_subdomain }}.{{ traefik_domain }}`)"
 {% endif %}

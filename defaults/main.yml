@@ -4,27 +4,30 @@ deluge_uid: 202
 deluge_gid: 202
 deluge_user: dl
 deluge_group: dl
-deluge_path: /torrent
-deluge_config: "/etc/docker/deluge/config"
-deluge_sub_paths: 
+deluge_torrent_path: /torrent
+deluge_sub_paths:
   - tmp
   - complets
   - archives
-deluge_docker_torrent_port: 58946
+docker_deluge_torrent_port: 58946
 
-deluge_docker_portmaping: yes
-deluge_docker_port: 8112
+docker_deluge_service_name: 'deluge'
+docker_deluge_dir: "{{ docker_conf }}/{{ docker_deluge_service_name }}"
+docker_deluge_config: "{{ docker_deluge_dir }}/config"
+docker_deluge_portmaping: true
+docker_deluge_port: 8112
+docker_deluge_loglevel: error
+docker_deluge_start: false
 
-deluge_docker_api_portmaping: no
-deluge_docker_api_port: 58846
+docker_deluge_api_portmaping: false
+docker_deluge_api_port: 58846
 
-deluge_docker_traefik: no
+docker_deluge_traefik: false
 deluge_traefik_subdomain: deluge
 
-deluge_docker_start: no
 
 traefik_network_name: proxy-net
 traefik_domain: yourdomain.tld
 docker_user: 1000
-docker_group: 1000
+docker_group: docker
 docker_conf: /etc/docker

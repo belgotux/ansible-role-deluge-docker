@@ -1,2 +1,13 @@
 ---
 # handlers file for deluge-docker
+- name: Docker down {{ docker_deluge_service_name }}
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_deluge_dir }}"
+    state: absent
+  when: docker_deluge_start
+
+- name: Docker up {{ docker_deluge_service_name }}
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_deluge_dir }}"
+    state: present
+  when: docker_deluge_start

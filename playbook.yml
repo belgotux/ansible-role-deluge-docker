@@ -1,6 +1,0 @@
----
-- hosts: "{{myhost | default('all')}}"
-  remote_user: root
-
-  roles:
-    - name: deluge-docker
