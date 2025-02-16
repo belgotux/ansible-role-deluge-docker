@@ -15,12 +15,18 @@ Role Variables
 --------------
 The role can work as it with the [default configuration](defaults/main.yml).
 
-### Docker/traefik (can be inherit for other docker roles in the collection via variables file)
+## Docker configuration
+
+### Mandatory
+- `docker_deluge_traefik_domain` the domaine to match with Traefik labels for deluge
+
+### Docker/traefik
+Optionnal and can be inherit for other docker roles in the collection via variables file :
 - `docker_deluge_traefik_network_name` your traefik network (default proxy-net)
 - `docker_deluge_docker_user` your usual user to run a docker container (default the user running the playbook)
 - `docker_deluge_docker_group` your usual group to run a docker container (default `docker`)
 
-### Main
+### Main docker configuration (optionnal)
 - `docker_deluge_uid` define a system uid (default 202)
 - `docker_deluge_gid` define a system group gid (default 202)
 - `docker_deluge_user` user in the host for files's ownership (default dl)
@@ -32,10 +38,9 @@ The role can work as it with the [default configuration](defaults/main.yml).
   - `complets` for finished downloads
   - `archives` to archive the .torrent files
 - `docker_deluge_torrent_port` port to expose for torrent P2P (default 58946) that is bind to 58946 inside the docker
-- `docker_deluge_traefik_domain` the domaine to match with Traefik labels for deluge
 - `docker_deluge_dir` the directory for deluge (default `/etc/docker/deluge`)
 
-### Second
+### Second docker configuration (very optional)
 - `docker_deluge_portmaping` web interface portmapping (default yes)
 - `docker_deluge_port` port to use in portmaping mode (default 8112)
 - `docker_deluge_api_portmaping` allow API portmapping, no needed if you using only webinterface (default no)
@@ -45,6 +50,27 @@ The role can work as it with the [default configuration](defaults/main.yml).
 - `docker_deluge_loglevel` set the loglevel output when running Deluge (default `error`) (image default is info for deluged and warning for delgued-web)
 - `docker_deluge_service_name` container name (default `deluge`)
 
+## Deluge configuration (optionnal)
+When you see `-1 it's unlimited
+### Core
+Bandwidth :
+- `docker_deluge_max_connections_global` Deluge max connexions (default `1200`)
+- `docker_deluge_max_upload_slots_global` Deluge max upload slots (default `35`)
+- `docker_deluge_max_download_speed` Deluge max donwload speed kbps (default `-1.0`)
+- `docker_deluge_max_upload_speed` Deluge max upload speed kbps (default `-1.0`)
+- `docker_deluge_max_half_open_connections` Deluge max half open connections (default `25`)
+- `docker_deluge_max_connections_per_second` Deluge max connections per second (default `20`)
+
+Bandwidth per torrent:
+- `docker_deluge_max_connections_per_torrent` Deluge max connections per torrent kbps (default `-1`)
+- `docker_deluge_max_download_speed_per_torrent` Deluge max download speed per torrent kbps (default `-1`)
+- `docker_deluge_max_upload_slots_per_torrent` Deluge max upload slots per torrent kbps (default `-1`)
+- `docker_deluge_max_upload_speed_per_torrent` Deluge max upload speed per torrent kbps (default `-1`)
+
+Queue :
+- `docker_deluge_max_active_downloading` Deluge max active download (default `10`)
+- `docker_deluge_max_active_limit` Deluge max active torrent active (default `205`)
+- `docker_deluge_max_active_seeding` Deluge max torrent seeding (default `200`)
 
 
 Dependencies

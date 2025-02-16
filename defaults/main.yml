@@ -18,11 +18,30 @@ docker_deluge_portmaping: true
 docker_deluge_port: 8112
 docker_deluge_loglevel: error
 docker_deluge_start: false
+docker_deluge_docker_user: '{{ ansible_user }}'
+docker_deluge_docker_group: docker
 
 docker_deluge_api_portmaping: false
 docker_deluge_api_port: 58846
 
 docker_deluge_traefik: false
 docker_deluge_traefik_subdomain: deluge
+docker_deluge_traefik_network_name: proxy-net
 
+# Bandwidth
+docker_deluge_max_connections_global: 1200
+docker_deluge_max_upload_slots_global: 35
+docker_deluge_max_download_speed: -1.0
+docker_deluge_max_upload_speed: -1.0
+docker_deluge_max_half_open_connections: 25
+docker_deluge_max_connections_per_second: 20
 
+docker_deluge_max_connections_per_torrent: -1
+docker_deluge_max_download_speed_per_torrent: -1
+docker_deluge_max_upload_slots_per_torrent: -1
+docker_deluge_max_upload_speed_per_torrent: -1
+
+# queue
+docker_deluge_max_active_downloading: 10
+docker_deluge_max_active_limit: 205
+docker_deluge_max_active_seeding: 200

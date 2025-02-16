@@ -37,6 +37,23 @@
     group: '{{ docker_deluge_docker_group }}'
     mode: '0775'
 
+- name: Create deluge conf dir
+  file:
+    name: '{{ docker_deluge_config }}'
+    state: directory
+    owner: '{{ docker_deluge_user }}'
+    group: '{{ docker_deluge_group }}'
+    mode: '0775'
+
+- name: Configure deluge
+  template:
+    src: core.conf.j2
+    dest: '{{ docker_deluge_config }}/core.conf'
+    owner: '{{ docker_deluge_user }}'
+    group: '{{ docker_deluge_group }}'
+    backup: true
+    mode: '0664'
+
 - name: Copy docker-compose.yml
   template:
     src: docker-compose.yml.j2
