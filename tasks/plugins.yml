@@ -1,0 +1,14 @@
+- name: Check if blocklist exist
+  stat:
+    path: '{{ docker_deluge_config }}/blocklist.conf'
+  register: docker_deluge_blocklist_stat
+- name: Configure plugin blocklist
+  template:
+    src: blocklist.conf.j2
+    dest: '{{ docker_deluge_config }}/blocklist.conf'
+    owner: '{{ docker_deluge_user }}'
+    group: '{{ docker_deluge_group }}'
+    backup: true
+    mode: '0664'
+  when: not docker_deluge_blocklist_stat.stat.exists
+
