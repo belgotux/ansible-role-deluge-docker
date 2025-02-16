@@ -72,6 +72,8 @@ Queue :
 - `docker_deluge_max_active_limit` Deluge max active torrent active (default `205`)
 - `docker_deluge_max_active_seeding` Deluge max torrent seeding (default `200`)
 
+### Plugin blocklist
+- `docker_deluge_blocklist_url` URL to blocklists file (same for transmission) (default `https://raw.githubusercontent.com/Naunter/BT_BlockLists/master/bt_blocklists.gz`)
 
 Dependencies
 ------------

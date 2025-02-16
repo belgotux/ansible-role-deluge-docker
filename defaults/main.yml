@@ -45,3 +45,6 @@ docker_deluge_max_upload_speed_per_torrent: -1
 docker_deluge_max_active_downloading: 10
 docker_deluge_max_active_limit: 205
 docker_deluge_max_active_seeding: 200
+
+# plugins
+docker_deluge_blocklist_url: https://raw.githubusercontent.com/Naunter/BT_BlockLists/master/bt_blocklists.gz
